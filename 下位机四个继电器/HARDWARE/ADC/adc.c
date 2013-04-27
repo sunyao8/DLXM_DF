@@ -20,7 +20,7 @@ void  Adc_Init(void)
 { 	
 	ADC_InitTypeDef ADC_InitStructure; 
 	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |RCC_APB2Periph_ADC1	, ENABLE );	  //使能ADC1通道时钟
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |RCC_APB2Periph_GPIOB|RCC_APB2Periph_ADC1	, ENABLE );	  //使能ADC1通道时钟
  
 	RCC_ADCCLKConfig(RCC_PCLK2_Div6);   //72M/6=12,ADC最大时间不能超过14M
 	//PA0/1/2/3 作为模拟通道输入引脚                         
@@ -28,10 +28,14 @@ void  Adc_Init(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;		//模拟输入引脚
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_4|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;		//模拟输入引脚
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-		
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;		//模拟输入引脚
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
 
 	ADC_DeInit(ADC1);  //将外设 ADC1 的全部寄存器重设为缺省值
 

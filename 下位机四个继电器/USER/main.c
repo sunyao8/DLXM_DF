@@ -8,7 +8,7 @@
 #include "24cxx.h"
 #include "touch.h"
 #include "includes.h" 	 
-#include <math.h>
+//#include <math.h>
 #include "adc.h"
  #include "task.h"
  /////////////////////////UCOSIIÈÎÎñ¶ÑÕ»ÉèÖÃ///////////////////////////////////
@@ -174,7 +174,7 @@ void start_task(void *pdata)
 	OSTaskSuspend(START_TASK_PRIO);	//¹ÒÆğÆğÊ¼ÈÎÎñ.
 	OS_EXIT_CRITICAL();				//ÍË³öÁÙ½çÇø(¿ÉÒÔ±»ÖĞ¶Ï´ò¶Ï)
 }	  
-//A1 A*1¿ª¹ØÈÎÎñ	 A1µãÓÉGet_Adc1(ADC_Channel_13)£¬A*1ÓÉGet_Adc2(ADC_Channel_10) ¹ıÁãÍ¶
+//A1 A*1¿ª¹ØÈÎÎñ ·åÖµÇĞ Ò»ºÅµçÈİ ¼ÌµçÆ÷1 
 void sc(void *pdata)
 {    u8 err;
     u16 max=0,a,i,j;
@@ -186,7 +186,7 @@ void sc(void *pdata)
 	 if(key1==0)
 	{	 for(i=1;i<500;i++)
         {
-	     a=abs(Get_Adc1(ADC_Channel_10)-Get_Adc2(ADC_Channel_1));	
+	     a=abs(Get_Adc1(ADC_Channel_8)-Get_Adc2(ADC_Channel_1));	
 		
 		 if(a>max)
 		 max=a;
@@ -213,6 +213,8 @@ void sc(void *pdata)
 	}
 	} //end
 
+
+//A1 * B1µ Ò»ºÅµçÈİÆ÷ ¼ÌµçÆ÷1 ¹ıÁãÍ¶ 
 	void sd(void *pdata)
 	{   u16 b;
 	    u8 err;
@@ -223,7 +225,7 @@ void sc(void *pdata)
 	  if(key1==1)
   {   	
   		 while(1)
-        { 	b=abs(Get_Adc1(ADC_Channel_10)-Get_Adc2(ADC_Channel_12));						        
+        { 	b=abs(Get_Adc1(ADC_Channel_2)-Get_Adc2(ADC_Channel_1));						        
 		    if((b>0)&&(b<=4))
 			  //if(b==0)
 		   {					   
@@ -244,6 +246,8 @@ void sc(void *pdata)
    }
    }
 
+
+//Ò»ºÅµçÈİ 2ºÅ¼ÌµçÆ÷ ·åÖµÇĞ
 void sa(void *pdata)
 {    u8 err;
     u16 max=0,a,i,j;
@@ -254,7 +258,7 @@ void sa(void *pdata)
     if(key2==0)
 	{	 for(i=1;i<500;i++)
         {
-	     a=abs(Get_Adc1(ADC_Channel_5)-Get_Adc2(ADC_Channel_2));	 
+	     a=abs(Get_Adc1(ADC_Channel_4)-Get_Adc2(ADC_Channel_8));	 
 		 if(a>max)
 		 max=a;
 		 }
@@ -279,6 +283,8 @@ void sa(void *pdata)
 	}
 	} //end
 
+
+//Ò»ºÅµçÈİ   2ºÅ ¼ÌµçÆ÷  ¹ıÁãÍ¶
 	void sb(void *pdata)
 	{   u16 b;
 	    u8 err;
@@ -288,10 +294,10 @@ void sa(void *pdata)
 	if(key2==1)
   {   	
   		 while(1)
-        { 	b=abs(Get_Adc1(ADC_Channel_5)-Get_Adc2(ADC_Channel_7));						        
+        { 	b=abs(Get_Adc1(ADC_Channel_5)-Get_Adc2(ADC_Channel_4));						        
 		   if((b>0)&&(b<=4))
 		{	 delay_us(20000);
-			  b=abs(Get_Adc1(ADC_Channel_5)-Get_Adc2(ADC_Channel_7));						        
+			  b=abs(Get_Adc1(ADC_Channel_5)-Get_Adc2(ADC_Channel_4));						        
 		   if((b>0)&&(b<=5))
 		  // if(b==0)
 		   {					   
@@ -317,6 +323,8 @@ void sa(void *pdata)
 
  /************************************************************/
  //A1 A*1¿ª¹ØÈÎÎñ	 A1µãÓÉGet_Adc1(ADC_Channel_13)£¬A*1ÓÉGet_Adc2(ADC_Channel_10) ¹ıÁãÍ¶
+
+//2ºÅµçÈİ 1ºÅ¼ÌµçÆ÷ ·åÖµÇĞ
 void sc1(void *pdata)
 {    u8 err;
     u16 max=0,a,i,j;
@@ -328,7 +336,7 @@ void sc1(void *pdata)
 	 if(key3==0)
 	{	 for(i=1;i<500;i++)
         {
-	     a=abs(Get_Adc1(ADC_Channel_11)-Get_Adc2(ADC_Channel_4));	
+	     a=abs(Get_Adc1(ADC_Channel_8)-Get_Adc2(ADC_Channel_1));	
 //		delay_us(10);
 		
 		 if(a>max)
@@ -337,7 +345,7 @@ void sc1(void *pdata)
         for(j=1;j<600;j++)
         {
 	    		
-		if((abs(Get_Adc1(ADC_Channel_11)-Get_Adc2(ADC_Channel_4)))>=max*800/1000)
+		if((abs(Get_Adc1(ADC_Channel_8)-Get_Adc2(ADC_Channel_1)))>=max*800/1000)
 		{ 	 // delay_ms(16);
 				delay_us(15250);
 			   //nodelay_ms(5);
@@ -361,6 +369,8 @@ void sc1(void *pdata)
 	}
 	} //end
 
+
+//2ºÅµçÈİ 1ºÅ¼ÌµçÆ÷ ¹ıÁãÍ¶
 	void sd1(void *pdata)
 	{   u16 b;
 	    u8 err;
@@ -371,8 +381,8 @@ void sc1(void *pdata)
 	  if(key3==1)
   {   	
   		 while(1)
-        { 	b=abs(Get_Adc1(ADC_Channel_11)-Get_Adc2(ADC_Channel_13));						        
-		    if((b>=0)&&(b<=5))
+        { 	b=abs(Get_Adc1(ADC_Channel_1)-Get_Adc2(ADC_Channel_6));						        
+		    if((b>0)&&(b<5))
 			  //if(b==0)
 		   {					   
 		       // delay_ms(13); 
@@ -395,7 +405,7 @@ void sc1(void *pdata)
    }	  
    }
    }
-
+//2ºÅµçÈİ 2ºÅ¼ÌµçÆ÷ ·åÖµÇĞ
 void sa1(void *pdata)
 {    u8 err;
     u16 max=0,a,i,j;
@@ -408,7 +418,7 @@ void sa1(void *pdata)
     if(key4==0)
 	{	 for(i=1;i<500;i++)
         {
-	     a=abs(Get_Adc1(ADC_Channel_6)-Get_Adc2(ADC_Channel_15));	
+	     a=abs(Get_Adc1(ADC_Channel_4)-Get_Adc2(ADC_Channel_8));	
 //	    delay_us(10); 
 		
 		 if(a>max)
@@ -416,7 +426,7 @@ void sa1(void *pdata)
 		 }
         for(j=1;j<600;j++)
         {	
-		 if((abs(Get_Adc1(ADC_Channel_6)-Get_Adc2(ADC_Channel_15)))>=max*995/1000)
+		 if((abs(Get_Adc1(ADC_Channel_4)-Get_Adc2(ADC_Channel_8)))>=max*995/1000)
 		{ 	 // delay_ms(16);
 		      delay_us(15250);  
 		GPIO_SetBits(GPIOB,GPIO_Pin_14);
@@ -437,6 +447,9 @@ void sa1(void *pdata)
 	}
 	} //end
 
+
+
+//2ºÅµçÈİ 2ºÅ¼ÌµçÆ÷ ¹ıÁãÍ¶
 	void sb1(void *pdata)
 	{   u16 b;
 	    u8 err;
@@ -448,8 +461,8 @@ void sa1(void *pdata)
 	if(key4==1)
   {   	
   		 while(1)
-        { 	b=abs(Get_Adc1(ADC_Channel_6)-Get_Adc2(ADC_Channel_14));					        
-		   if((b>=0)&&(b<=3))
+        { 	b=abs(Get_Adc1(ADC_Channel_4)-Get_Adc2(ADC_Channel_7));					        
+		   if((b>0)&&(b<3))
 		{	// delay_us(20000);
 		//	  b=abs(Get_Adc1(ADC_Channel_11)-Get_Adc2(ADC_Channel_13));						        
 		  // if((b>=0)&&(b<=4))
@@ -486,19 +499,19 @@ void key_task(void *pdata)
 {			    						 
 	while(1)
 	{ 
-		if(!INPUT1)
+		if(INPUT1)
 			{ OSSemPost(sem1_switch1open);
               OSSemPost(sem1_switch2open);
 			 }//·¢ËÍÏûÏ¢
-		if(INPUT1)
+		if(!INPUT1)
 			{ OSSemPost(sem1_switch1close);
 		      OSSemPost(sem1_switch2close);
 			 }//·¢ËÍÏûÏ¢
-		if(!INPUT1)
+		if(INPUT2)
 			{ OSSemPost(sem2_switch1open);
               OSSemPost(sem2_switch2open);
 			 }//·¢ËÍÏûÏ¢
-		if(INPUT1)
+		if(!INPUT2)
 			{ OSSemPost(sem2_switch1close);
 		      OSSemPost(sem2_switch2close);
 			 }//·¢ËÍÏûÏ¢
