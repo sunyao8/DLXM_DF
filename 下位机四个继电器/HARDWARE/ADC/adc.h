@@ -28,5 +28,11 @@
 void Adc_Init(void);
 u16  Get_Adc1(u8 ch);  
 u16 Get_Adc2(u8 ch); 
+u16 Get_Adc1_28(u8 ch);   
+u16 Get_Adc2_28(u8 ch);   
+u16 Get_Adc1_Average(u8 ,u8 );
+u16 Get_Adc2_Average(u8 ,u8 );
+
 void deinit(void);
 #endif 
+

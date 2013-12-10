@@ -32,7 +32,7 @@ void  Adc_Init(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;		//模拟输入引脚
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;		//模拟输入引脚
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
@@ -94,12 +94,7 @@ void  Adc_Init(void)
 	 GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;		 //推挽输出
 	 GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
 	 GPIO_Init(GPIOD, &GPIO_InitStructure); 
-	 GPIO_ResetBits(GPIOD,GPIO_Pin_0);	
-     GPIO_ResetBits(GPIOD,GPIO_Pin_1);	
-	 GPIO_ResetBits(GPIOD,GPIO_Pin_5);	
-	 GPIO_ResetBits(GPIOD,GPIO_Pin_3);	
-	 GPIO_ResetBits(GPIOD,GPIO_Pin_4);	
-    GPIO_ResetBits(GPIOD,GPIO_Pin_2);	
+	
 
 RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 GPIO_InitStructure.GPIO_Pin =GPIO_Pin_11;
@@ -144,36 +139,73 @@ u16 Get_Adc1(u8 ch)
 	return ADC_GetConversionValue(ADC2);	//返回最近一次ADC1规则组的转换结果
 }
 
-  void deinit()
-  {
-  	 delay_us(1000);
-	  	GPIO_SetBits(GPIOB,GPIO_Pin_5);
-		GPIO_ResetBits(GPIOB,GPIO_Pin_6);
-		delay_us(1000);
-		 	GPIO_SetBits(GPIOB,GPIO_Pin_12);
-		GPIO_ResetBits(GPIOB,GPIO_Pin_13);
-		delay_us(1000);
-          GPIO_SetBits(GPIOB,GPIO_Pin_7);
-		GPIO_ResetBits(GPIOB,GPIO_Pin_8);
-		delay_us(1000);
-		   GPIO_SetBits(GPIOB,GPIO_Pin_14);
-		GPIO_ResetBits(GPIOB,GPIO_Pin_15);
-			   delay_us(1000);
-			  GPIO_ResetBits(GPIOB,GPIO_Pin_5);
-//			  GPIO_ResetBits(GPIOB,GPIO_Pin_6);
-		   GPIO_ResetBits(GPIOB,GPIO_Pin_12);
-//			   GPIO_ResetBits(GPIOB,GPIO_Pin_13);
-			   GPIO_ResetBits(GPIOB,GPIO_Pin_7);
-//			   GPIO_ResetBits(GPIOB,GPIO_Pin_8);
-			   GPIO_ResetBits(GPIOB,GPIO_Pin_14);
-//			   GPIO_ResetBits(GPIOB,GPIO_Pin_15);
+u16 Get_Adc1_28(u8 ch)   
+{
+  	//设置指定ADC的规则组通道，设置它们的转化顺序和采样时间
+	//ADC_RegularChannelConfig(ADC1, ch, 1, ADC_SampleTime_55Cycles5 );	//ADC1,ADC通道3,规则采样顺序值为1,采样时间为239.5周期	  			    
+ ADC_RegularChannelConfig(ADC1, ch, 1, ADC_SampleTime_13Cycles5 );
+	ADC_SoftwareStartConvCmd(ADC1, ENABLE);		//使能指定的ADC1的软件转换启动功能	
+	 
+	while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC ));//等待转换结束
 
+	return ADC_GetConversionValue(ADC1);	//返回最近一次ADC1规则组的转换结果
+}
+
+ u16 Get_Adc2_28(u8 ch)   
+{
+  	//设置指定ADC的规则组通道，设置它们的转化顺序和采样时间
+	//ADC_RegularChannelConfig(ADC1, ch, 1, ADC_SampleTime_55Cycles5 );	//ADC1,ADC通道3,规则采样顺序值为1,采样时间为239.5周期	  			    
+ ADC_RegularChannelConfig(ADC2, ch, 1, ADC_SampleTime_13Cycles5 );
+	ADC_SoftwareStartConvCmd(ADC2, ENABLE);		//使能指定的ADC1的软件转换启动功能	
+	 
+	while(!ADC_GetFlagStatus(ADC2, ADC_FLAG_EOC ));//等待转换结束
+
+	return ADC_GetConversionValue(ADC2);	//返回最近一次ADC1规则组的转换结果
+}
+
+ 
+
+  void deinit()
+  {   
+
+GPIO_ResetBits(GPIOB,GPIO_Pin_5);
+GPIO_ResetBits(GPIOB,GPIO_Pin_6);
+GPIO_ResetBits(GPIOB,GPIO_Pin_7);
+GPIO_ResetBits(GPIOB,GPIO_Pin_8);
+GPIO_ResetBits(GPIOB,GPIO_Pin_12);
+GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+GPIO_ResetBits(GPIOB,GPIO_Pin_14);
+GPIO_ResetBits(GPIOB,GPIO_Pin_15);	
+delay_us(500000);
 
   }
 
 
+u16 Get_Adc1_Average(u8 ch,u8 times)
+{
+	u32 temp_val=0;
+	u8 t;
+	for(t=0;t<times;t++)
+	{
+		temp_val+=Get_Adc1(ch);
+	//	delay_ms(5);
+	}
+	return temp_val/times;
+} 
 
 
+
+u16 Get_Adc2_Average(u8 ch,u8 times)
+{
+	u32 temp_val=0;
+	u8 t;
+	for(t=0;t<times;t++)
+	{
+		temp_val+=Get_Adc2(ch);
+	//	delay_ms(5);
+	}
+	return temp_val/times;
+} 
 
 
 
