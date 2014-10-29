@@ -85,6 +85,9 @@ OS_STK S3OPEN_TASK_STK[S3OPEN_STK_SIZE];
 OS_STK S3CLOSE_TASK_STK[S3CLOSE_STK_SIZE];
 //任务函数接口
 //void switch2close_task(void *pdata);
+#define SWITCH1_CLOSETIME 15800
+#define SWITCH2_CLOSETIME 6667-300
+
 	  void sb1(void *pdata);;
 
 
@@ -168,11 +171,11 @@ void start_task(void *pdata)
  	OS_ENTER_CRITICAL();			//进入临界区(无法被中断打断)    				    				   
     OSTaskCreate(sa,(void *)0,(OS_STK*)&S1OPEN_TASK_STK[S1OPEN_STK_SIZE-1],S1OPEN_TASK_PRIO);						   	 				   
  	OSTaskCreate(sb,(void *)0,(OS_STK*)&S1CLOSE_TASK_STK[S1CLOSE_STK_SIZE-1],S1CLOSE_TASK_PRIO); 
-	OSTaskCreate(sc,(void *)0,(OS_STK*)&S2OPEN_TASK_STK[S2OPEN_STK_SIZE-1],S2OPEN_TASK_PRIO);						   	 				   
+//	OSTaskCreate(sc,(void *)0,(OS_STK*)&S2OPEN_TASK_STK[S2OPEN_STK_SIZE-1],S2OPEN_TASK_PRIO);						   	 				   
  	OSTaskCreate(sd,(void *)0,(OS_STK*)&S2CLOSE_TASK_STK[S2CLOSE_STK_SIZE-1],S2CLOSE_TASK_PRIO);
 	OSTaskCreate(sa1,(void *)0,(OS_STK*)&S3OPEN_TASK_STK[S3OPEN_STK_SIZE-1],S3OPEN_TASK_PRIO);						   	 				   
  	OSTaskCreate(sb1,(void *)0,(OS_STK*)&S3CLOSE_TASK_STK[S3CLOSE_STK_SIZE-1],S3CLOSE_TASK_PRIO); 
-	OSTaskCreate(sc1,(void *)0,(OS_STK*)&S4OPEN_TASK_STK[S4OPEN_STK_SIZE-1],S4OPEN_TASK_PRIO);						   	 				   
+//	OSTaskCreate(sc1,(void *)0,(OS_STK*)&S4OPEN_TASK_STK[S4OPEN_STK_SIZE-1],S4OPEN_TASK_PRIO);						   	 				   
  	OSTaskCreate(sd1,(void *)0,(OS_STK*)&S4CLOSE_TASK_STK[S4CLOSE_STK_SIZE-1],S4CLOSE_TASK_PRIO);  
 	OSTaskCreate(key_task,(void *)0,(OS_STK*)&KEY_TASK_STK[KEY_STK_SIZE-1],KEY_TASK_PRIO);	 				   
  		
@@ -206,10 +209,10 @@ if(flag_phase==1)
 		 	 for(i=1;i<512*2;i++)		 //850
 		            if(bf_a(max))
 		 	{ 	 
-		     delay_us(17200);//15300		   60a=17000
+		     delay_us(SWITCH1_CLOSETIME);//15300		   60a=17000
 		GPIO_SetBits(GPIOB,GPIO_Pin_5);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_6);
-			delay_us(5200);//6667
+			delay_us(SWITCH2_CLOSETIME);//6667
 		GPIO_SetBits(GPIOB,GPIO_Pin_7);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_8);
 			 //  delay_ms(100);
@@ -238,10 +241,10 @@ if(flag_phase==0)
 		  for(i=1;i<512*2;i++)		 //600
 		 if(bf_c(max))
 		 	{ 	 
-		     delay_us(17200);//15300
+		     delay_us(SWITCH1_CLOSETIME);//15300
 		GPIO_SetBits(GPIOB,GPIO_Pin_7);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_8);
-			delay_us(5200);//6667
+			delay_us(SWITCH2_CLOSETIME);//6667
 		GPIO_SetBits(GPIOB,GPIO_Pin_5);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_6);
 			 //  delay_ms(100);
@@ -258,7 +261,7 @@ if(flag_phase==0)
 		}
     	}
 /*******************************************************/
-
+              max=0;	 
     if(key2==1&&key1==1)break;
        	}	     	
               max=0;	 
@@ -290,7 +293,7 @@ if(flag_phase==1)
 			  b=abs(Get_Adc1_28(ADC_Channel_2)-Get_Adc2_28(ADC_Channel_1));				   
 		           if((b>0)&&(b<=10))
 				   {
-					delay_us(14300);
+					delay_us(13000);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_5); 
 			GPIO_SetBits(GPIOB,GPIO_Pin_6);  
 			///		delay_us(7000);
@@ -319,7 +322,7 @@ if(flag_phase==0)
 		  // if(b==0)
 		   {					   
 		      
-				 delay_us(14300);
+				 delay_us(13000);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_7); //PD2->1
 			GPIO_SetBits(GPIOB,GPIO_Pin_8);  //PC11->0
 			 ///  delay_us(7000);
@@ -369,10 +372,10 @@ if(flag_phase==1)
 		  for(i=1;i<512*2;i++)		 //600
 		 if(bf_c(max))
 		 	{ 	 
-		     delay_us(17200);//15300
+		     delay_us(SWITCH1_CLOSETIME);//15300
 		GPIO_SetBits(GPIOB,GPIO_Pin_7);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_8);
-			delay_us(5200);//6667
+			delay_us(SWITCH2_CLOSETIME);//6667
 		GPIO_SetBits(GPIOB,GPIO_Pin_5);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_6);
 			 //  delay_ms(100);
@@ -400,10 +403,10 @@ if(flag_phase==0)
 		 	 for(i=1;i<512*2;i++)		 //850
 		            if(bf_a(max))
 		 	{ 	 
-		     delay_us(17200);//15300		   60a=17000
+		     delay_us(SWITCH1_CLOSETIME);//15300		   60a=17000
 		GPIO_SetBits(GPIOB,GPIO_Pin_5);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_6);
-			delay_us(5200);//6667
+			delay_us(SWITCH2_CLOSETIME);//6667
 		GPIO_SetBits(GPIOB,GPIO_Pin_7);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_8);
 			 //  delay_ms(100);
@@ -450,7 +453,7 @@ if(flag_phase==1)
 		  // if(b==0)
 		   {					   
 		      
-				 delay_us(14300);
+				 delay_us(13000);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_7); //PD2->1
 			GPIO_SetBits(GPIOB,GPIO_Pin_8);  //PC11->0
 			 ///  delay_us(7000);
@@ -481,7 +484,7 @@ if(flag_phase==0)
 			  b=abs(Get_Adc1_28(ADC_Channel_2)-Get_Adc2_28(ADC_Channel_1));				   
 		           if((b>0)&&(b<=10))
 				   {
-					delay_us(14300);
+					delay_us(13000);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_5); 
 			GPIO_SetBits(GPIOB,GPIO_Pin_6);  
 			///		delay_us(7000);
@@ -531,10 +534,10 @@ void sc1(void *pdata)
          for(i=1;i<512*2;i++)	  //850
 		 if(bf_a(max))
 		 	{ 	 
-		     delay_us(17200);//15300	 13634		16966
+		     delay_us(SWITCH1_CLOSETIME);//15300	 13634		16966
 		GPIO_SetBits(GPIOB,GPIO_Pin_12);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_13);
-			delay_us(5200);//15500	  5001	  8333
+			delay_us(SWITCH2_CLOSETIME);//15500	  5001	  8333
 		GPIO_SetBits(GPIOB,GPIO_Pin_14);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_15);
 			 //  delay_ms(100);
@@ -562,10 +565,10 @@ void sc1(void *pdata)
 	         for(i=1;i<512*2;i++)	//600 
 		 if(bf_c(max))
 		 	{ 	 
-		     delay_us(17200);
+		     delay_us(SWITCH1_CLOSETIME);
 		GPIO_SetBits(GPIOB,GPIO_Pin_14);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_15);
-			delay_us(5200);//15500
+			delay_us(SWITCH2_CLOSETIME);//15500
 		GPIO_SetBits(GPIOB,GPIO_Pin_12);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_13);
 			 //  delay_ms(100);
@@ -582,7 +585,7 @@ void sc1(void *pdata)
 		}
 		}
 /*******************************************************/
-		 
+		              max=0;	  
     if(key3==0&&key4==0)break;		 
        	}	     	
               max=0;	 
@@ -613,7 +616,7 @@ if(flag_phase==1)
 		       	b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));		 
 					    if((b>0)&&(b<=10))
 				{
-				 delay_us(14300);
+				 delay_us(13000);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_12); //PD2->1
 			GPIO_SetBits(GPIOB,GPIO_Pin_13); 
 		 //PC11->0
@@ -644,7 +647,7 @@ if(flag_phase==0)
 		
 		   {					   
 		         //投切延时
-				delay_us(14300);
+				delay_us(13000);
 			
 			GPIO_ResetBits(GPIOB,GPIO_Pin_14); //PD2->1
 			GPIO_SetBits(GPIOB,GPIO_Pin_15);  //PC11->0
@@ -688,10 +691,10 @@ void sa1(void *pdata)
 	         for(i=1;i<512*2;i++)	//600 
 		 if(bf_c(max))
 		 	{ 	 
-		     delay_us(17200);
+		     delay_us(SWITCH1_CLOSETIME);
 		GPIO_SetBits(GPIOB,GPIO_Pin_14);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_15);
-			delay_us(5200);//15500
+			delay_us(SWITCH2_CLOSETIME);//15500
 		GPIO_SetBits(GPIOB,GPIO_Pin_12);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_13);
 			 //  delay_ms(100);
@@ -719,10 +722,10 @@ void sa1(void *pdata)
          for(i=1;i<512*2;i++)	  //850
 		 if(bf_a(max))
 		 	{ 	 
-		     delay_us(17200);//15300	 13634		16966
+		     delay_us(SWITCH1_CLOSETIME);//15300	 13634		16966
 		GPIO_SetBits(GPIOB,GPIO_Pin_12);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_13);
-			delay_us(5200);//15500	  5001	  8333
+			delay_us(SWITCH2_CLOSETIME);//15500	  5001	  8333
 		GPIO_SetBits(GPIOB,GPIO_Pin_14);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_15);
 			 //  delay_ms(100);
@@ -770,7 +773,7 @@ if(flag_phase==1)
 		
 		   {					   
 		         //投切延时
-				delay_us(14300);
+				delay_us(13000);
 			
 			GPIO_ResetBits(GPIOB,GPIO_Pin_14); //PD2->1
 			GPIO_SetBits(GPIOB,GPIO_Pin_15);  //PC11->0
@@ -798,7 +801,7 @@ if(flag_phase==0)
 		       	b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));		 
 					    if((b>0)&&(b<=10))
 				{
-				 delay_us(14300);
+				 delay_us(13000);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_12); //PD2->1
 			GPIO_SetBits(GPIOB,GPIO_Pin_13); 
 		 //PC11->0
