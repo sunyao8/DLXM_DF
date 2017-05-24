@@ -76,7 +76,7 @@ OS_STK S3OPEN_TASK_STK[S3OPEN_STK_SIZE];
 //»ŒŒÒ∫Ø ˝Ω”ø⁄
 //void switch2open_task(void *pdata);
 	void sa1(void *pdata);
-//SWITCH1OPEN»ŒŒÒ
+;//SWITCH1OPEN»ŒŒÒ
 //…Ë÷√»ŒŒÒ”≈œ»º∂
 #define S3CLOSE_TASK_PRIO       			12 
 //…Ë÷√»ŒŒÒ∂—’ª¥Û–°
@@ -87,9 +87,9 @@ OS_STK S3CLOSE_TASK_STK[S3CLOSE_STK_SIZE];
 //void switch2close_task(void *pdata);
 #define SWITCH1_CLOSETIME 19300
 #define SWITCH2_CLOSETIME 5067
-#define SWITCH12_OPENTIME 13300
+#define SWITCH12_OPENTIME 13400
 
-	  void sb1(void *pdata);;
+	  void sb1(void *pdata);
 
 
 //SWITCH2OPEN»ŒŒÒ
@@ -275,8 +275,9 @@ if(flag_phase==0)
 //A1 * B1µ “ª∫≈µÁ»›∆˜ ºÃµÁ∆˜1 π˝¡„Õ∂ 
 	void sd(void *pdata)
 	{   u16 b;
-	    u8 err;
-		
+	    u8 err,flag=0;
+	u32 i;
+	    s32 max=0,a=0;	
 	while(1)
 		{ OSSemPend(sem1_switch1close,0,&err);
 	  // OSSemPend(key1close, 0, &err);
@@ -288,12 +289,28 @@ if(flag_phase==1)
   {   		delay_us(20000);
 
   		 while(1)
-        { 	b=abs(Get_Adc1_28(ADC_Channel_2)-Get_Adc2_28(ADC_Channel_1));						        
-		    if((b>0)&&(b<=10))
-			  
+        { 	flag=0;
+                a=0;
+		 max=0;
+            for(i=1;i<512*2;i++)		   //850
+        {
+	     a=(Get_Adc1(ADC_Channel_2)-Get_Adc2(ADC_Channel_1));	 
+		 if(a>max&&a>0)
+		 max=a;
+
+	 }
+			
+		 	 for(i=1;i<512*2;i++)		 //850
+		            if(bf_gl1(max))
+		            	{
+			for(i=1;i<512*2;i++)		 //850			
+				{
+			b=abs(Get_Adc1_28(ADC_Channel_2)-Get_Adc2_28(ADC_Channel_1));						        
+
+			if((b>0)&&(b<=4))	  
 		   {	 delay_us(20000);
 			  b=abs(Get_Adc1_28(ADC_Channel_2)-Get_Adc2_28(ADC_Channel_1));				   
-		           if((b>0)&&(b<=10))
+		           if((b>0)&&(b<=4))
 				   {
 					delay_us(SWITCH12_OPENTIME);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_5); 
@@ -305,41 +322,73 @@ if(flag_phase==1)
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_6);
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_5);
 			 key1=0;
+			 flag=1;
 			 break;
 			 }
-		   }
-   		  }
+
+
+
+			}
+
+				}
+
+		            	break;}
+
+		 if(flag==1)break;}
    }
 		}
 if(flag_phase==0)
 {
 	if(key2==1)
-  {   	delay_us(20000);
+  {   		delay_us(20000);
+
   		 while(1)
-        { 	b=abs(Get_Adc1_28(ADC_Channel_5)-Get_Adc2_28(ADC_Channel_4));						        
-		   if((b>0)&&(b<=10))
-		{	 delay_us(20000);
-			  b=abs(Get_Adc1_28(ADC_Channel_5)-Get_Adc2_28(ADC_Channel_4));						        
-		   if((b>0)&&(b<=10))
-		  // if(b==0)
-		   {					   
-		      
-				 delay_us(SWITCH12_OPENTIME);
-			GPIO_ResetBits(GPIOB,GPIO_Pin_7); //PD2->1
-			GPIO_SetBits(GPIOB,GPIO_Pin_8);  //PC11->0
-			 ///  delay_us(7000);
-			///delay_us(20000);	 ///º‰∏Ù ±º‰
-			 delay_ms(100);//¬ˆ≥Â—” ±
-			//   delay_us(100000);
-		 GPIO_ResetBits(GPIOB,GPIO_Pin_8);
+        { 	flag=0;
+                a=0;
+		 max=0;
+            for(i=1;i<512*2;i++)		   //850
+        {
+	     a=(Get_Adc1(ADC_Channel_5)-Get_Adc2(ADC_Channel_4));	 
+		 if(a>max&&a>0)
+		 max=a;
+
+	 }
+			
+		 	 for(i=1;i<512*2;i++)		 //850
+		            if(bf_gl2(max))
+		            	{
+			for(i=1;i<512*2;i++)		 //850			
+				{
+			b=abs(Get_Adc1_28(ADC_Channel_5)-Get_Adc2_28(ADC_Channel_4));						        
+
+			if((b>0)&&(b<=4))	  
+		   {	 delay_us(20000);
+			  b=abs(Get_Adc1_28(ADC_Channel_5)-Get_Adc2_28(ADC_Channel_4));				   
+		           if((b>0)&&(b<=4))
+				   {
+					delay_us(SWITCH12_OPENTIME);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_7); 
+			GPIO_SetBits(GPIOB,GPIO_Pin_8);  
+			///		delay_us(7000);
+			///	delay_us(20000);	 ///º‰∏Ù ±º‰
+			delay_ms(100); 
+		//	delay_us(100000);
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_7);
-             // OSSemPost(key2open);    
-			//OSMutexPost(key2open);
-			  key2=0;
+		 GPIO_ResetBits(GPIOB,GPIO_Pin_8);
+			 key2=0;
+			 flag=1;
 			 break;
-		   }
-		   }
-   		  }
+			 }
+
+
+
+			}
+
+				}
+
+		            	break;}
+
+		 if(flag==1)break;}
    }
 }
 	  
@@ -437,54 +486,96 @@ if(flag_phase==0)
 //“ª∫≈µÁ»›   2∫≈ ºÃµÁ∆˜  π˝¡„Õ∂
 	void sb(void *pdata)
 	{   u16 b;
-	    u8 err;
-		
+	    u8 err,flag=0;
+	u32 i;
+	    s32 max=0,a=0;	
+
 	while(1)
 		{ OSSemPend(sem1_switch2close,0,&err);
 /*******************************************************/
 if(flag_phase==1)
 {
 	if(key2==1)
-  {   	delay_us(20000);
+  {   		delay_us(20000);
+
   		 while(1)
-        { 	b=abs(Get_Adc1_28(ADC_Channel_5)-Get_Adc2_28(ADC_Channel_4));						        
-		   if((b>0)&&(b<=10))
-		{	 delay_us(20000);
-			  b=abs(Get_Adc1_28(ADC_Channel_5)-Get_Adc2_28(ADC_Channel_4));						        
-		   if((b>0)&&(b<=10))
-		  // if(b==0)
-		   {					   
-		      
-				 delay_us(SWITCH12_OPENTIME);
-			GPIO_ResetBits(GPIOB,GPIO_Pin_7); //PD2->1
-			GPIO_SetBits(GPIOB,GPIO_Pin_8);  //PC11->0
-			 ///  delay_us(7000);
-			///delay_us(20000);	 ///º‰∏Ù ±º‰
-			 delay_ms(100);//¬ˆ≥Â—” ±
-			//   delay_us(100000);
-		 GPIO_ResetBits(GPIOB,GPIO_Pin_8);
+        { 	flag=0;
+                a=0;
+		 max=0;
+            for(i=1;i<512*2;i++)		   //850
+        {
+	     a=(Get_Adc1(ADC_Channel_5)-Get_Adc2(ADC_Channel_4));	 
+		 if(a>max&&a>0)
+		 max=a;
+
+	 }
+			
+		 	 for(i=1;i<512*2;i++)		 //850
+		            if(bf_gl2(max))
+		            	{
+			for(i=1;i<512*2;i++)		 //850			
+				{
+			b=abs(Get_Adc1_28(ADC_Channel_5)-Get_Adc2_28(ADC_Channel_4));						        
+
+			if((b>0)&&(b<=4))	  
+		   {	 delay_us(20000);
+			  b=abs(Get_Adc1_28(ADC_Channel_5)-Get_Adc2_28(ADC_Channel_4));				   
+		           if((b>0)&&(b<=4))
+				   {
+					delay_us(SWITCH12_OPENTIME);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_7); 
+			GPIO_SetBits(GPIOB,GPIO_Pin_8);  
+			///		delay_us(7000);
+			///	delay_us(20000);	 ///º‰∏Ù ±º‰
+			delay_ms(100); 
+		//	delay_us(100000);
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_7);
-             // OSSemPost(key2open);    
-			//OSMutexPost(key2open);
-			  key2=0;
+		 GPIO_ResetBits(GPIOB,GPIO_Pin_8);
+			 key2=0;
+			 flag=1;
 			 break;
-		   }
-		   }
-   		  }
+			 }
+
+
+
+			}
+
+				}
+
+		            	break;}
+
+		 if(flag==1)break;}
    }
 }
 
 if(flag_phase==0)
 {
 	  if(key1==1)
-  {   	delay_us(20000);
+  {   		delay_us(20000);
+
   		 while(1)
-        { 	b=abs(Get_Adc1_28(ADC_Channel_2)-Get_Adc2_28(ADC_Channel_1));						        
-		    if((b>0)&&(b<=10))
-			  
+        { 	flag=0;
+                a=0;
+		 max=0;
+            for(i=1;i<512*2;i++)		   //850
+        {
+	     a=(Get_Adc1(ADC_Channel_2)-Get_Adc2(ADC_Channel_1));	 
+		 if(a>max&&a>0)
+		 max=a;
+
+	 }
+			
+		 	 for(i=1;i<512*2;i++)		 //850
+		            if(bf_gl1(max))
+		            	{
+			for(i=1;i<512*2;i++)		 //850			
+				{
+			b=abs(Get_Adc1_28(ADC_Channel_2)-Get_Adc2_28(ADC_Channel_1));						        
+
+			if((b>0)&&(b<=4))	  
 		   {	 delay_us(20000);
 			  b=abs(Get_Adc1_28(ADC_Channel_2)-Get_Adc2_28(ADC_Channel_1));				   
-		           if((b>0)&&(b<=10))
+		           if((b>0)&&(b<=4))
 				   {
 					delay_us(SWITCH12_OPENTIME);
 			GPIO_ResetBits(GPIOB,GPIO_Pin_5); 
@@ -496,10 +587,19 @@ if(flag_phase==0)
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_6);
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_5);
 			 key1=0;
+			 flag=1;
 			 break;
 			 }
-		   }
-   		  }
+
+
+
+			}
+
+				}
+
+		            	break;}
+
+		 if(flag==1)break;}
    }
 		}
 /*******************************************************/
@@ -600,8 +700,9 @@ void sc1(void *pdata)
 //2∫≈µÁ»› 1∫≈ºÃµÁ∆˜ π˝¡„Õ∂
 	void sd1(void *pdata)
 	{   u16 b;
-	    u8 err;
-		
+	    u8 err,flag=0;
+	     u32 i;
+	    s32 max=0,a=0;		
 	while(1)
 		{ OSSemPend(sem2_switch1close,0,&err);
 	  // OSSemPend(key1close, 0, &err);
@@ -609,61 +710,110 @@ void sc1(void *pdata)
 if(flag_phase==1)
 	  {
 	  if(key3==1)
-  {   	delay_us(20000);
+  {   		delay_us(20000);
+
   		 while(1)
-        { 	b=abs(Get_Adc1_28(ADC_Channel_4)-Get_Adc2_28(ADC_Channel_7));						        
-		    if((b>0)&&(b<=10))
-			  
-		   {	delay_us(20000);				   
-		       	b=abs(Get_Adc1_28(ADC_Channel_4)-Get_Adc2_28(ADC_Channel_7));		 
-					    if((b>0)&&(b<=10))
+        { 	flag=0;
+                a=0;
+		 max=0;
+            for(i=1;i<512*2;i++)		   //850
+        {
+	     a=(Get_Adc1(ADC_Channel_7)-Get_Adc2(ADC_Channel_4));	 
+		 if(a>max&&a>0)
+		 max=a;
+
+	 }
+			
+		 	 for(i=1;i<512*2;i++)		 //850
+		            if(bf_gl3(max))
+		            	{
+			for(i=1;i<512*2;i++)		 //850			
 				{
-				 delay_us(SWITCH12_OPENTIME);
-			GPIO_ResetBits(GPIOB,GPIO_Pin_14); //PD2->1
-			GPIO_SetBits(GPIOB,GPIO_Pin_15);  //PC11->0	 
-		
-		 //PC11->0
+			b=abs(Get_Adc1_28(ADC_Channel_4)-Get_Adc2_28(ADC_Channel_7));						        
+
+			if((b>0)&&(b<=4))	  
+		   {	 delay_us(20000);
+			  b=abs(Get_Adc1_28(ADC_Channel_4)-Get_Adc2_28(ADC_Channel_7));				   
+		           if((b>0)&&(b<=4))
+				   {
+					delay_us(SWITCH12_OPENTIME);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_14); 
+			GPIO_SetBits(GPIOB,GPIO_Pin_15);  
+			///		delay_us(7000);
+			///	delay_us(20000);	 ///º‰∏Ù ±º‰
 			delay_ms(100); 
-	 GPIO_ResetBits(GPIOB,GPIO_Pin_14);
-		 GPIO_ResetBits(GPIOB,GPIO_Pin_15);	
-	
-		 // OSSemPost(key1open);
-			//OSMutexPost(key2open);
+		//	delay_us(100000);
+		 GPIO_ResetBits(GPIOB,GPIO_Pin_14);
+		 GPIO_ResetBits(GPIOB,GPIO_Pin_15);
 			 key3=0;
+			 flag=1;
 			 break;
 			 }
-		   }
-   		  }
+
+
+
+			}
+
+				}
+
+		            	break;}
+
+		 if(flag==1)break;}
    }
 		}
 
 if(flag_phase==0)
 {
 	if(key4==1)
-  {   	delay_us(20000);
+  {   		delay_us(20000);
+
   		 while(1)
-        { 	b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));					        
-		   if((b>0)&&(b<=10))
-		{	delay_us(20000);
-			  b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));						        
-		   if((b>0)&&(b<=10))
-		
-		   {					   
-		         //Õ∂«–—” ±
-				delay_us(SWITCH12_OPENTIME);
+        { 	flag=0;
+                a=0;
+		 max=0;
+            for(i=1;i<512*2;i++)		   //850
+        {
+	     a=(Get_Adc1(ADC_Channel_6)-Get_Adc2(ADC_Channel_1));	 
+		 if(a>max&&a>0)
+		 max=a;
+
+	 }
 			
-			GPIO_ResetBits(GPIOB,GPIO_Pin_12); //PD2->1
-			GPIO_SetBits(GPIOB,GPIO_Pin_13); 	
-			 			   	///	delay_us(20000);	 ///º‰∏Ù ±º‰
-			 delay_ms(100);//¬ˆ≥Â—” ±
-			
+		 	 for(i=1;i<512*2;i++)		 //850
+		            if(bf_gl4(max))
+		            	{
+			for(i=1;i<512*2;i++)		 //850			
+				{
+			b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));						        
+
+			if((b>0)&&(b<=4))	  
+		   {	 delay_us(20000);
+			  b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));				   
+		           if((b>0)&&(b<=4))
+				   {
+					delay_us(SWITCH12_OPENTIME);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_12); 
+			GPIO_SetBits(GPIOB,GPIO_Pin_13);  
+			///		delay_us(7000);
+			///	delay_us(20000);	 ///º‰∏Ù ±º‰
+			delay_ms(100); 
+		//	delay_us(100000);
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_12);
-		 GPIO_ResetBits(GPIOB,GPIO_Pin_13);	
-			  key4=0;
+		 GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+			 key4=0;
+			 flag=1;
 			 break;
-		   }
-		   }
-   		  }
+			 }
+
+
+
+			}
+
+				}
+
+		            	break;}
+
+		 if(flag==1)break;}
    }
 }	  
 /*******************************************************/
@@ -758,67 +908,118 @@ void sa1(void *pdata)
 //2∫≈µÁ»› 2∫≈ºÃµÁ∆˜ π˝¡„Õ∂
 	void sb1(void *pdata)
 	{   u16 b;
-	    u8 err;
-		
+	    u8 err,flag=0;
+	     u32 i;
+	    s32 max=0,a=0;
 	while(1)
 		{ OSSemPend(sem2_switch2close,0,&err);
 /*******************************************************/
 if(flag_phase==1)
 {
 	if(key4==1)
-  {   	delay_us(20000);
+  {   		delay_us(20000);
+
   		 while(1)
-        { 	b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));					        
-		   if((b>0)&&(b<=10))
-		{	delay_us(20000);
-			  b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));						        
-		   if((b>0)&&(b<=10))
-		
-		   {					   
-		         //Õ∂«–—” ±
-				delay_us(SWITCH12_OPENTIME);
-			GPIO_ResetBits(GPIOB,GPIO_Pin_12); //PD2->1
-			GPIO_SetBits(GPIOB,GPIO_Pin_13); 
+        { 	flag=0;
+                a=0;
+		 max=0;
+            for(i=1;i<512*2;i++)		   //850
+        {
+	     a=(Get_Adc1(ADC_Channel_6)-Get_Adc2(ADC_Channel_1));	 
+		 if(a>max&&a>0)
+		 max=a;
+
+	 }
 			
-			 			   	///	delay_us(20000);	 ///º‰∏Ù ±º‰
-			 delay_ms(100);//¬ˆ≥Â—” ±
-		
+		 	 for(i=1;i<512*2;i++)		 //850
+		            if(bf_gl4(max))
+		            	{
+			for(i=1;i<512*2;i++)		 //850			
+				{
+			b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));						        
+
+			if((b>0)&&(b<=4))	  
+		   {	 delay_us(20000);
+			  b=abs(Get_Adc1_28(ADC_Channel_1)-Get_Adc2_28(ADC_Channel_6));				   
+		           if((b>0)&&(b<=4))
+				   {
+					delay_us(SWITCH12_OPENTIME);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_12); 
+			GPIO_SetBits(GPIOB,GPIO_Pin_13);  
+			///		delay_us(7000);
+			///	delay_us(20000);	 ///º‰∏Ù ±º‰
+			delay_ms(100); 
+		//	delay_us(100000);
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_12);
-		 GPIO_ResetBits(GPIOB,GPIO_Pin_13);		
-		
-			  key4=0;
+		 GPIO_ResetBits(GPIOB,GPIO_Pin_13);
+			 key4=0;
+			 flag=1;
 			 break;
-		   }
-		   }
-   		  }
+			 }
+
+
+
+			}
+
+				}
+
+		            	break;}
+
+		 if(flag==1)break;}
    }
 }
 if(flag_phase==0)
 {
 	  if(key3==1)
-  {   	delay_us(20000);
+  {   		delay_us(20000);
+
   		 while(1)
-        { 	b=abs(Get_Adc1_28(ADC_Channel_4)-Get_Adc2_28(ADC_Channel_7));						        
-		    if((b>0)&&(b<=10))
-			  
-		   {	delay_us(20000);				   
-		       	b=abs(Get_Adc1_28(ADC_Channel_4)-Get_Adc2_28(ADC_Channel_7));		 
-					    if((b>0)&&(b<=10))
+        { 	flag=0;
+                a=0;
+		 max=0;
+            for(i=1;i<512*2;i++)		   //850
+        {
+	     a=(Get_Adc1(ADC_Channel_7)-Get_Adc2(ADC_Channel_4));	 
+		 if(a>max&&a>0)
+		 max=a;
+
+	 }
+			
+		 	 for(i=1;i<512*2;i++)		 //850
+		            if(bf_gl3(max))
+		            	{
+			for(i=1;i<512*2;i++)		 //850			
 				{
-				 delay_us(SWITCH12_OPENTIME);
-		GPIO_ResetBits(GPIOB,GPIO_Pin_14); //PD2->1
-			GPIO_SetBits(GPIOB,GPIO_Pin_15);  //PC11->0	
-		 //PC11->0
+			b=abs(Get_Adc1_28(ADC_Channel_4)-Get_Adc2_28(ADC_Channel_7));						        
+
+			if((b>0)&&(b<=4))	  
+		   {	 delay_us(20000);
+			  b=abs(Get_Adc1_28(ADC_Channel_4)-Get_Adc2_28(ADC_Channel_7));				   
+		           if((b>0)&&(b<=4))
+				   {
+					delay_us(SWITCH12_OPENTIME);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_14); 
+			GPIO_SetBits(GPIOB,GPIO_Pin_15);  
+			///		delay_us(7000);
+			///	delay_us(20000);	 ///º‰∏Ù ±º‰
 			delay_ms(100); 
-	 GPIO_ResetBits(GPIOB,GPIO_Pin_14);
+		//	delay_us(100000);
+		 GPIO_ResetBits(GPIOB,GPIO_Pin_14);
 		 GPIO_ResetBits(GPIOB,GPIO_Pin_15);
-		 // OSSemPost(key1open);
-			//OSMutexPost(key2open);
 			 key3=0;
+			 flag=1;
 			 break;
 			 }
-		   }
-   		  }
+
+
+
+			}
+
+				}
+
+		            	break;}
+
+		 if(flag==1)break;}
    }
 		}
 /*******************************************************/

@@ -8,7 +8,7 @@ u32 C_count=0,A_count=0;
 u8 bf_c(s32 max)
 {s32 j=0;
 j=(Get_Adc1(ADC_Channel_4)-Get_Adc2(ADC_Channel_8));
-if ((j>max*990/1000))return 1;
+if ((j>max*980/1000))return 1;
 else return 0;
 }
 
@@ -27,7 +27,7 @@ u8 bfg_c(u16 max)
 u8 bf_a(s32 max)
 {s32 j=0;
   j=(Get_Adc1(ADC_Channel_1)-Get_Adc2(ADC_Channel_8));
-if ((j>max*990/1000))return 1;
+if ((j>max*980/1000))return 1;
 else return 0;
 }
 
@@ -43,7 +43,30 @@ u8 bfg_a(u16 max)
 	else return 0;
 	}
 
-
+u8 bf_gl1(s32 max)
+{s32 j=0;
+  j=(Get_Adc1(ADC_Channel_2)-Get_Adc2(ADC_Channel_1));
+if ((j>max*980/1000))return 1;
+else return 0;
+}
+u8 bf_gl2(s32 max)
+{s32 j=0;
+  j=(Get_Adc1(ADC_Channel_5)-Get_Adc2(ADC_Channel_4));
+if ((j>max*980/1000))return 1;
+else return 0;
+}
+u8 bf_gl3(s32 max)
+{s32 j=0;
+  j=(Get_Adc1(ADC_Channel_7)-Get_Adc2(ADC_Channel_4));
+if ((j>max*980/1000))return 1;
+else return 0;
+}
+u8 bf_gl4(s32 max)
+{s32 j=0;
+  j=(Get_Adc1(ADC_Channel_6)-Get_Adc2(ADC_Channel_1));
+if ((j>max*980/1000))return 1;
+else return 0;
+}
  /**************************************************************************/
 
  u8 bf_c1(u16 max)

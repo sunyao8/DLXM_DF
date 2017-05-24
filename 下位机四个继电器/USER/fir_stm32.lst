@@ -222,10 +222,9 @@ ARM Macro Assembler    Page 4
   124 0000009E         
   125 0000009E E8BD 8FF0       LDMIA            sp!, {r4-r11, pc}
   126 000000A2                 END
-Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=..\OBJ\f
-ir_stm32.d -o..\OBJ\fir_stm32.o -IC:\Keil\ARM\RV31\Inc -IC:\Keil\ARM\CMSIS\Incl
-ude -IC:\Keil\ARM\Inc\ST\STM32F10x --list=.\fir_stm32.lst ..\STM32F10x_DSP_Lib\
-src\asm\arm\fir_stm32.s
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork -o..\OBJ\fir_stm3
+2.o -Id:\Keil\ARM\INC -Id:\Keil\ARM\INC\ST\STM32F10x --list=.\fir_stm32.lst ..\
+STM32F10x_DSP_Lib\src\asm\arm\fir_stm32.s
 
 
 
@@ -265,4 +264,4 @@ Symbol: next_tap
       At line 116 in file ..\STM32F10x_DSP_Lib\src\asm\arm\fir_stm32.s
 Comment: next_tap used once
 4 symbols
-355 symbols in table
+344 symbols in table

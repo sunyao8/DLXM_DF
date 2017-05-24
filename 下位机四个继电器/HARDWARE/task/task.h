@@ -21,6 +21,10 @@
   u8 bf_c1(u16);
  u8 bg_c1(u16);
  u8 bfg_c1(u16);
+u8 bf_gl1(s32 max);
+u8 bf_gl2(s32 max);
+u8 bf_gl3(s32 max);
+u8 bf_gl4(s32 max);
 
  void TIM3_IRQHandler(void);
 void TIM3_Int_Init(u16 arr,u16 psc);

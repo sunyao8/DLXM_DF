@@ -147,10 +147,9 @@ ARM Macro Assembler    Page 3
    96 00000098 BCF0            LDMIA            SP!, {R4-R7}
    97 0000009A 4770            BX               LR          ; return
    98 0000009C                 END
-Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=..\OBJ\i
-irarma_stm32.d -o..\OBJ\iirarma_stm32.o -IC:\Keil\ARM\RV31\Inc -IC:\Keil\ARM\CM
-SIS\Include -IC:\Keil\ARM\Inc\ST\STM32F10x --list=.\iirarma_stm32.lst ..\STM32F
-10x_DSP_Lib\src\asm\arm\iirarma_stm32.s
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork -o..\OBJ\iirarma_
+stm32.o -Id:\Keil\ARM\INC -Id:\Keil\ARM\INC\ST\STM32F10x --list=.\iirarma_stm32
+.lst ..\STM32F10x_DSP_Lib\src\asm\arm\iirarma_stm32.s
 
 
 
@@ -190,4 +189,4 @@ Symbol: iirarma_stm32
       At line 22 in file ..\STM32F10x_DSP_Lib\src\asm\arm\iirarma_stm32.s
 Comment: iirarma_stm32 used once
 4 symbols
-343 symbols in table
+332 symbols in table

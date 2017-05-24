@@ -1009,10 +1009,9 @@ xba09,0x0646
 xbcf0,0x0324
   373 000005DE         
   374 000005DE                 END
-Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=..\OBJ\c
-r4_fft_256_stm32.d -o..\OBJ\cr4_fft_256_stm32.o -IC:\Keil\ARM\RV31\Inc -IC:\Kei
-l\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\ST\STM32F10x --list=.\cr4_fft_256_stm32.l
-st ..\STM32F10x_DSP_Lib\src\asm\arm\cr4_fft_256_stm32.s
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork -o..\OBJ\cr4_fft_
+256_stm32.o -Id:\Keil\ARM\INC -Id:\Keil\ARM\INC\ST\STM32F10x --list=.\cr4_fft_2
+56_stm32.lst ..\STM32F10x_DSP_Lib\src\asm\arm\cr4_fft_256_stm32.s
 
 
 
@@ -1088,13 +1087,13 @@ Symbol: NPT
    Definitions
       At line 46 in file ..\STM32F10x_DSP_Lib\src\asm\arm\cr4_fft_256_stm32.s
    Uses
-      At line 136 in macro ð@Ÿ(¤Ÿ ¿Ÿ€$Ÿ
+      At line 136 in macro `ÁœèœERO_OPT
       at line 228 in file ..\STM32F10x_DSP_Lib\src\asm\arm\cr4_fft_256_stm32.s
-      At line 139 in macro ð@Ÿ(¤Ÿ ¿Ÿ€$Ÿ
+      At line 139 in macro `ÁœèœERO_OPT
       at line 228 in file ..\STM32F10x_DSP_Lib\src\asm\arm\cr4_fft_256_stm32.s
-      At line 142 in macro ð@Ÿ(¤Ÿ ¿Ÿ€$Ÿ
+      At line 142 in macro `ÁœèœERO_OPT
       at line 228 in file ..\STM32F10x_DSP_Lib\src\asm\arm\cr4_fft_256_stm32.s
-      At line 145 in macro ð@Ÿ(¤Ÿ ¿Ÿ€$Ÿ
+      At line 145 in macro `ÁœèœERO_OPT
       at line 228 in file ..\STM32F10x_DSP_Lib\src\asm\arm\cr4_fft_256_stm32.s
 
 1 symbol
@@ -1113,4 +1112,4 @@ Symbol: TableFFT
       None
 Comment: TableFFT unused
 1 symbol
-358 symbols in table
+347 symbols in table
